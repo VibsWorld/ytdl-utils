@@ -1,0 +1,75 @@
+<Window x:Class="YtdlOn24Downloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YtdlOn24Downloader"
+        mc:Ignorable="d"
+        Title="yt-dlp On24 Downloader" Height="700" Width="900"
+        MinHeight="600" MinWidth="700">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="15">
+
+            <!-- URL -->
+            <Label Content="Event / Stream URL" FontWeight="Bold"/>
+            <TextBox x:Name="TxtUrl" Height="60" TextWrapping="Wrap" AcceptsReturn="False"
+                     VerticalScrollBarVisibility="Auto" TextChanged="OnInputChanged"/>
+
+            <!-- Cookies -->
+            <Label Content="Cookies File (cookies.txt)" FontWeight="Bold" Margin="0,10,0,0"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="TxtCookiesPath" Grid.Column="0" TextChanged="OnInputChanged"/>
+                <Button x:Name="BtnBrowseCookies" Grid.Column="1" Content="Browse..." Margin="5,0,0,0" Padding="10,2" Click="BtnBrowseCookies_Click"/>
+            </Grid>
+
+            <!-- yt-dlp path -->
+            <Label Content="yt-dlp Executable (optional — leave blank if on PATH)" FontWeight="Bold" Margin="0,10,0,0"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="TxtYtdlpPath" Grid.Column="0" TextChanged="OnInputChanged"/>
+                <Button x:Name="BtnBrowseYtdlp" Grid.Column="1" Content="Browse..." Margin="5,0,0,0" Padding="10,2" Click="BtnBrowseYtdlp_Click"/>
+            </Grid>
+
+            <!-- Format -->
+            <Label Content="Format String" FontWeight="Bold" Margin="0,10,0,0"/>
+            <TextBox x:Name="TxtFormat" Text="bestvideo+bestaudio/best" TextChanged="OnInputChanged"/>
+
+            <!-- Robustness Options -->
+            <GroupBox Header="Robustness Options" Margin="0,15,0,0" FontWeight="Bold">
+                <UniformGrid Columns="2" Margin="5">
+                    <CheckBox x:Name="ChkRetryInfinite" Content="--retries infinite" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkFragmentRetryInfinite" Content="--fragment-retries infinite" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkFileAccessRetries" Content="--file-access-retries 10" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkContinuePartial" Content="--continue (resume partial)" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkPartFile" Content="--part (write to .part first)" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkSkipUnavailableFragments" Content="--skip-unavailable-fragments" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkHlsUseMpegts" Content="--hls-use-mpegts" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkSocketTimeout" Content="--socket-timeout 30" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkThrottledRate" Content="--throttled-rate 100K" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkNoAbortOnError" Content="--no-abort-on-error" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                    <CheckBox x:Name="ChkConcurrentFragments" Content="--concurrent-fragments 3" IsChecked="True" Checked="OnInputChanged" Unchecked="OnInputChanged"/>
+                </UniformGrid>
+            </GroupBox>
+
+            <!-- Command Preview -->
+            <Label Content="Generated Command" FontWeight="Bold" Margin="0,10,0,0"/>
+            <TextBox x:Name="TxtCommandPreview" IsReadOnly="True" TextWrapping="Wrap"
+                     Background="#F5F5F5" Foreground="#333333" FontFamily="Consolas"
+                     VerticalScrollBarVisibility="Auto" Height="80"/>
+
+            <!-- Execute -->
+            <Button x:Name="BtnExecute" Content="Execute" Margin="0,15,0,0" Padding="10,8" FontSize="14" FontWeight="Bold" Click="BtnExecute_Click"/>
+
+            <!-- Status -->
+            <TextBlock x:Name="TxtStatus" Margin="0,8,0,0" TextWrapping="Wrap" Foreground="DarkRed"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>
