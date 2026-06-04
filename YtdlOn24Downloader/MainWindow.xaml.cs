@@ -83,7 +83,7 @@ namespace YtdlOn24Downloader
         {
             var sb = new StringBuilder();
 
-            string ytdlp = string.IsNullOrWhiteSpace(TxtYtdlpPath.Text) ? "yt-dlp" : QuotePath(TxtYtdlpPath.Text.Trim());
+            string ytdlp = string.IsNullOrWhiteSpace(TxtYtdlpPath.Text) ? "yt-dlp" : QuoteArgument(TxtYtdlpPath.Text.Trim().Replace("\r", "").Replace("\n", ""));
             sb.Append(ytdlp);
 
             AppendIfChecked(sb, ChkRetryInfinite, "--retries infinite");
@@ -98,22 +98,22 @@ namespace YtdlOn24Downloader
             AppendIfChecked(sb, ChkNoAbortOnError, "--no-abort-on-error");
             AppendIfChecked(sb, ChkConcurrentFragments, "--concurrent-fragments 3");
 
-            string cookies = TxtCookiesPath.Text.Trim();
+            string cookies = TxtCookiesPath.Text.Trim().Replace("\r", "").Replace("\n", "");
             if (!string.IsNullOrEmpty(cookies))
             {
-                sb.Append($" --cookies {QuotePath(cookies)}");
+                sb.Append($" --cookies {QuoteArgument(cookies)}");
             }
 
-            string format = TxtFormat.Text.Trim();
+            string format = TxtFormat.Text.Trim().Replace("\r", "").Replace("\n", "");
             if (!string.IsNullOrEmpty(format))
             {
-                sb.Append($" -f {QuotePath(format)}");
+                sb.Append($" -f {QuoteArgument(format)}");
             }
 
-            string url = TxtUrl.Text.Trim();
+            string url = TxtUrl.Text.Trim().Replace("\r", "").Replace("\n", "");
             if (!string.IsNullOrEmpty(url))
             {
-                sb.Append($" {QuotePath(url)}");
+                sb.Append($" {QuoteArgument(url)}");
             }
 
             return sb.ToString();
@@ -127,16 +127,12 @@ namespace YtdlOn24Downloader
             }
         }
 
-        private static string QuotePath(string path)
+        private static string QuoteArgument(string argument)
         {
-            if (string.IsNullOrEmpty(path))
-                return path;
+            if (string.IsNullOrEmpty(argument))
+                return argument;
 
-            if (path.Contains(' ', StringComparison.Ordinal))
-            {
-                return $"\"{path}\"";
-            }
-            return path;
+            return $"\"{argument}\"";
         }
 
         private void BtnBrowseCookies_Click(object sender, RoutedEventArgs e)
