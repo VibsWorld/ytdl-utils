@@ -106,7 +106,7 @@ You will see a window titled **"yt-dlp On24 Downloader"**.
 4. The full path will appear in the text box.
 
 > **What is `cookies.txt`?**
-> This is the cookie export you use with `yt-dlp --cookies cookies.txt`. If you do not have one yet, you can export cookies from your browser using an extension such as **"Get cookies.txt LOCALLY"** (Chrome/Edge) or **"cookies.txt"** (Firefox). Make sure the file is named `cookies.txt` or that you pick the correct `.txt` export.
+> This is the cookie export you use with `yt-dlp --cookies cookies.txt`. If you do not have one yet, you can export cookies from your browser using an extension such as **[Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc?pli=1)** (Chrome/Edge) or **"cookies.txt"** (Firefox). Make sure the file is named `cookies.txt` or that you pick the correct `.txt` export.
 
 [↑ Back to top](#ytdlon24downloader)
 
