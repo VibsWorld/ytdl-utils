@@ -68,6 +68,8 @@ namespace YtdlOn24Downloader
 
         private void OnInputChanged(object sender, RoutedEventArgs e)
         {
+            if (!IsLoaded)
+                return;
             UpdatePreview();
         }
 
