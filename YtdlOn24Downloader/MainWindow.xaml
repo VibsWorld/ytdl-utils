@@ -41,6 +41,17 @@
             <Label Content="Format String" FontWeight="Bold" Margin="0,10,0,0"/>
             <TextBox x:Name="TxtFormat" Text="bestvideo+bestaudio/best" TextChanged="OnInputChanged"/>
 
+            <!-- Output Folder -->
+            <Label Content="Output Folder (optional — blank downloads to your User Profile)" FontWeight="Bold" Margin="0,10,0,0"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="TxtOutputDir" Grid.Column="0" TextChanged="OnInputChanged"/>
+                <Button x:Name="BtnBrowseOutput" Grid.Column="1" Content="Browse..." Margin="5,0,0,0" Padding="10,2" Click="BtnBrowseOutput_Click"/>
+            </Grid>
+
             <!-- Robustness Options -->
             <GroupBox Header="Robustness Options" Margin="0,15,0,0" FontWeight="Bold">
                 <UniformGrid Columns="2" Margin="5">

@@ -17,6 +17,7 @@ A simple Windows WPF UI for [yt-dlp](https://github.com/yt-dlp/yt-dlp) tailored 
   - [Step 3 – Select your cookies file](#step-3--select-your-cookies-file)
   - [Step 4 – (Optional) Tell the app where yt-dlp lives](#step-4--optional-tell-the-app-where-yt-dlp-lives)
   - [Step 5 – Confirm the format string](#step-5--confirm-the-format-string)
+  - [Step 5b – (Optional) Pick the output folder](#step-5b--optional-pick-the-output-folder)
   - [Step 6 – Review the robustness options](#step-6--review-the-robustness-options)
   - [Step 7 – Read the command preview](#step-7--read-the-command-preview)
   - [Step 8 – Execute](#step-8--execute)
@@ -62,6 +63,7 @@ Before you start, make sure you have:
 | **Cookies File** | Browse to your exported `cookies.txt`. |
 | **yt-dlp Executable** | Optional — leave blank if `yt-dlp` is on your system PATH. |
 | **Format String** | Defaults to `bestvideo+bestaudio/best`. Change only if you know what you are doing. |
+| **Output Folder** | Optional — leave blank to download to your User Profile. |
 | **Robustness Options** | 11 checkboxes pre-tuned for long, flaky downloads. |
 | **Generated Command** | Live preview of the exact command that will run. |
 | **Execute** | Opens a CMD window and starts `yt-dlp`. |
@@ -129,6 +131,21 @@ This is the same as your current command. You can change it if you want a differ
 
 [↑ Back to top](#ytdlon24downloader)
 
+### Step 5b – (Optional) Pick the output folder
+
+The **"Output Folder"** row lets you choose where yt-dlp saves the downloaded file.
+
+1. Click the **Browse...** button next to **"Output Folder"**.
+2. A Windows folder picker will open.
+3. Navigate to the folder you want and select it.
+4. The full path will appear in the text box.
+
+> - Leave the box **empty** to keep the default behaviour: the app launches CMD in your **User Profile** folder (`C:\Users\YourName`).
+> - If you fill in a folder that does not exist, the app shows a clear red error message and does **not** silently fall back to the User Profile.
+> - The selected folder is passed as the working directory of the spawned CMD, so yt-dlp writes the file there directly. yt-dlp's default filename rules still apply.
+
+[↑ Back to top](#ytdlon24downloader)
+
 ### Step 6 – Review the robustness options
 
 In the **"Robustness Options"** group you will see 11 checkboxes. **All are checked by default** because they are specifically chosen to make long downloads survive slow internet, server throttling, and transient errors.
@@ -184,6 +201,7 @@ The next time you open the app, all your previous values are restored automatica
 - The last URL you pasted
 - The cookies and yt-dlp paths you selected
 - The format string
+- The output folder you picked (or blank for the User Profile default)
 - Which robustness checkboxes were on or off
 
 You only have to paste a **new URL** and click **Execute** again.
@@ -194,12 +212,12 @@ You only have to paste a **new URL** and click **Execute** again.
 
 ## Where downloaded files go
 
-yt-dlp saves files to your **current working directory**. Because the app launches CMD in your Windows **User Profile** folder (`C:\Users\YourName`), that is where the video will appear by default.
+yt-dlp saves files to its **current working directory**. The app sets that working directory when it spawns the CMD window:
 
-If you want to change the download folder, you can:
-1. Keep the CMD window open after the download finishes.
-2. Manually move the file.
-3. *(Future feature idea: an output-folder picker inside the app.)*
+- **Output Folder is blank** (the default): CMD is launched in your Windows **User Profile** folder (`C:\Users\YourName`), so the video appears there.
+- **Output Folder is set**: CMD is launched in that folder instead, and yt-dlp writes the file there.
+
+Pick the folder before clicking Execute. If the folder no longer exists by the time you click Execute, the app will show a red error message instead of silently falling back to the User Profile.
 
 [↑ Back to top](#ytdlon24downloader)
 
@@ -212,6 +230,7 @@ If you want to change the download folder, you can:
 | "Error: URL is required." | The URL box is empty. | Paste the full event link. |
 | "Error: Cookies file not found" | The path in the Cookies box does not exist. | Click Browse and re-select the file. |
 | "Error: yt-dlp executable not found" | You browsed to a wrong `.exe` path. | Clear the yt-dlp box (to use PATH) or re-browse to the correct file. |
+| "Error: Output folder does not exist: ..." | You typed or browsed to a folder path that does not exist on this machine. | Click Browse and re-select a real folder, or clear the Output Folder box to use the default (User Profile). |
 | CMD window flashes and closes instantly | yt-dlp is not on PATH and you left the yt-dlp box empty. | Browse to `yt-dlp.exe` in the app, or add its folder to your system PATH. |
 | Download is extremely slow even with all flags | The server may be sending a low-bitrate stream, or your ISP is shaping traffic. | Try lowering `--concurrent-fragments` to `1` or `2`. If the stream offers multiple formats, try a lower quality in the Format String box. |
 | Build fails with "user-mapped section open" | An external tool (Google Drive sync, OneDrive, antivirus) is locking the build output folder. | Build in a non-synced folder, or run `dotnet build -p:UseAppHost=false`. |
