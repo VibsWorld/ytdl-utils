@@ -39,6 +39,7 @@ namespace YtdlOn24Downloader
             _options.Add(new RobustnessOption(ChkThrottledRate,         "--throttled-rate 100K",        () => Settings.Default.ThrottledRate,           v => Settings.Default.ThrottledRate = v));
             _options.Add(new RobustnessOption(ChkNoAbortOnError,        "--no-abort-on-error",          () => Settings.Default.NoAbortOnError,          v => Settings.Default.NoAbortOnError = v));
             _options.Add(new RobustnessOption(ChkConcurrentFragments,   "--concurrent-fragments 3",     () => Settings.Default.ConcurrentFragments,     v => Settings.Default.ConcurrentFragments = v));
+            _options.Add(new RobustnessOption(ChkShutdownOnFinish,      "--shutdown",                  () => Settings.Default.ShutdownOnFinish,        v => Settings.Default.ShutdownOnFinish = v));
         }
 
         private void LoadOptions()
@@ -127,6 +128,14 @@ namespace YtdlOn24Downloader
             if (!string.IsNullOrEmpty(url))
             {
                 sb.Append($" {QuoteArgument(url)}");
+            }
+
+            if (ChkShutdownOnFinish.IsChecked == true)
+            {
+                // Chain via && so the shutdown only fires if yt-dlp exits cleanly.
+                // timeout gives the user a visible "Press CTRL+C to cancel" prompt in the CMD window;
+                // shutdown /t 60 also surfaces a system-tray balloon; either way `shutdown /a` aborts.
+                sb.Append(" && timeout /t 60 && shutdown /s /t 60 /c \"yt-dlp On24 download finished\"");
             }
 
             return sb.ToString();
