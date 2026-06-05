@@ -202,5 +202,17 @@ namespace YtdlOn24Downloader.Properties {
                 this["ConcurrentFragments"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShutdownOnFinish {
+            get {
+                return ((bool)(this["ShutdownOnFinish"]));
+            }
+            set {
+                this["ShutdownOnFinish"] = value;
+            }
+        }
     }
 }
