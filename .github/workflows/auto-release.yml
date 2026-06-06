@@ -29,16 +29,13 @@ jobs:
         run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: Delete existing latest release
-        run: |
-          $release = gh release view "latest-release" 2>$null
-          if ($release) {
-            gh release delete "latest-release" -y --cleanup-tag
-            Write-Host "Deleted existing latest-release"
-          } else {
-            Write-Host "No existing latest-release found, creating new one"
-          }
+        uses: dev-drprasad/delete-tag-and-release@v1.1
+        with:
+          tag_name: latest-release
+          delete_release: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
 
       - name: Create/Update Release
         uses: softprops/action-gh-release@v2
