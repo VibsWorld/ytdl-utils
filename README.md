@@ -165,7 +165,7 @@ You can uncheck any option if you do not want it for a particular download, but 
 | `--throttled-rate 100K` | If the download speed falls below ~100 KB/s, yt-dlp assumes the server is throttling it and re-extracts the stream URL. This often bypasses server-side rate limits. |
 | `--no-abort-on-error` | If one unexpected error happens, yt-dlp logs it and keeps going instead of killing the entire download. |
 | `--concurrent-fragments 3` | Downloads 3 stream fragments at the same time. This improves throughput on slow links without being so aggressive that it overwhelms your bandwidth. |
-| `--shutdown` (shut down PC 60s after download) | If checked, the spawned CMD runs `timeout /t 60 && shutdown /s /t 60` after yt-dlp exits cleanly. The 60-second pause shows a "Press CTRL+C to cancel..." prompt in the CMD window, and Windows also shows a system-tray "Your PC will shut down in 1 minute" balloon. Either way you can cancel with `shutdown /a` in any CMD. **Defaults to off.** Requires the "Shut down the system" user right (granted to administrators by default; standard users will get an "Access denied" error from `shutdown`). |
+| Shut down PC 60s after download (no yt-dlp flag — controls the `&&` chain) | If checked, the spawned CMD runs `timeout /t 60 && shutdown /s /t 60 /c "yt-dlp On24 download finished"` after yt-dlp exits cleanly. The 60-second pause shows a "Press CTRL+C to cancel..." prompt in the CMD window, and Windows also shows a system-tray "Your PC will shut down in 1 minute" balloon. Either way you can cancel with `shutdown /a` in any CMD. **Defaults to off.** Requires the "Shut down the system" user right (granted to administrators by default; standard users will get an "Access denied" error from `shutdown`). |
 
 [↑ Back to top](#ytdlon24downloader)
 
@@ -233,7 +233,7 @@ Pick the folder before clicking Execute. If the folder no longer exists by the t
 | "Error: Cookies file not found" | The path in the Cookies box does not exist. | Click Browse and re-select the file. |
 | "Error: yt-dlp executable not found" | You browsed to a wrong `.exe` path. | Clear the yt-dlp box (to use PATH) or re-browse to the correct file. |
 | "Error: Output folder does not exist: ..." | You typed or browsed to a folder path that does not exist on this machine. | Click Browse and re-select a real folder, or clear the Output Folder box to use the default (User Profile). |
-| "Access denied" when shutdown fires | Your user account lacks the "Shut down the system" right (standard user accounts do not have it). | Run the app as Administrator, or uncheck the `--shutdown` robustness option. |
+| "Access denied" when shutdown fires | Your user account lacks the "Shut down the system" right (standard user accounts do not have it). | Run the app as Administrator, or uncheck the *shut down PC after download* checkbox in the Robustness Options group. |
 | CMD window flashes and closes instantly | yt-dlp is not on PATH and you left the yt-dlp box empty. | Browse to `yt-dlp.exe` in the app, or add its folder to your system PATH. |
 | Download is extremely slow even with all flags | The server may be sending a low-bitrate stream, or your ISP is shaping traffic. | Try lowering `--concurrent-fragments` to `1` or `2`. If the stream offers multiple formats, try a lower quality in the Format String box. |
 | Build fails with "user-mapped section open" | An external tool (Google Drive sync, OneDrive, antivirus) is locking the build output folder. | Build in a non-synced folder, or run `dotnet build -p:UseAppHost=false`. |

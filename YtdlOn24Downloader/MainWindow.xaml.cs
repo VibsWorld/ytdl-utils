@@ -39,7 +39,9 @@ namespace YtdlOn24Downloader
             _options.Add(new RobustnessOption(ChkThrottledRate,         "--throttled-rate 100K",        () => Settings.Default.ThrottledRate,           v => Settings.Default.ThrottledRate = v));
             _options.Add(new RobustnessOption(ChkNoAbortOnError,        "--no-abort-on-error",          () => Settings.Default.NoAbortOnError,          v => Settings.Default.NoAbortOnError = v));
             _options.Add(new RobustnessOption(ChkConcurrentFragments,   "--concurrent-fragments 3",     () => Settings.Default.ConcurrentFragments,     v => Settings.Default.ConcurrentFragments = v));
-            _options.Add(new RobustnessOption(ChkShutdownOnFinish,      "--shutdown",                  () => Settings.Default.ShutdownOnFinish,        v => Settings.Default.ShutdownOnFinish = v));
+            // ChkShutdownOnFinish is not a yt-dlp flag — it controls whether we chain `&& timeout && shutdown`
+            // after the URL in BuildCommand. It is intentionally NOT in the _options list, so the flag
+            // is not appended to yt-dlp's argv.
         }
 
         private void LoadOptions()
@@ -115,7 +117,8 @@ namespace YtdlOn24Downloader
             string cookies = Normalize(TxtCookiesPath.Text);
             if (!string.IsNullOrEmpty(cookies))
             {
-                sb.Append($" --cookies {QuoteArgument(cookies)}");
+                // Always quote the cookies path so paths with spaces, parens, or `&` are passed intact to yt-dlp.
+                sb.Append($" --cookies \"{cookies.Replace("\"", "\\\"")}\"");
             }
 
             string format = Normalize(TxtFormat.Text);
