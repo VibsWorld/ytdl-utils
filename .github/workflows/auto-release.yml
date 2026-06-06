@@ -1,0 +1,58 @@
+name: Auto Release on Main Commit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore YtdlOn24Downloader/YtdlOn24Downloader.csproj
+
+      - name: Build Release
+        run: dotnet publish YtdlOn24Downloader/YtdlOn24Downloader.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=false -o publish
+
+      - name: Get short commit SHA
+        id: sha
+        run: echo "short_sha=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Delete existing latest release
+        run: |
+          $release = gh release view "latest-release" 2>$null
+          if ($release) {
+            gh release delete "latest-release" -y --cleanup-tag
+            Write-Host "Deleted existing latest-release"
+          } else {
+            Write-Host "No existing latest-release found, creating new one"
+          }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create/Update Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-release
+          name: Latest Build - ${{ steps.sha.outputs.short_sha }}
+          body: |
+            Auto-generated release from commit: ${{ github.sha }}
+
+            **Commit message:** ${{ github.event.head_commit.message }}
+            **Author:** ${{ github.event.head_commit.author.name }}
+            **Date:** ${{ github.event.head_commit.timestamp }}
+          files: publish/YtdlOn24Downloader.exe
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
